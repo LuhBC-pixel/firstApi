@@ -7,12 +7,23 @@ const server = http.createServer((request, response) => {
     const parseUrl = url.parse(request.url, true);
     console.log(`Request method: ${request.method} | Endpoint: ${parseUrl.pathname}`);
 
+    let { pathname } = parseUrl;
+    let id = null;
+
+    const splitEndpoint = pathname.split('/').filter(Boolean);
+
+    if (splitEndpoint.length > 1) {
+        pathname = `/${splitEndpoint[0]}/:id`;
+        id = splitEndpoint[1];
+    }
+
     const route = routes.find((routeObj) => (
-        routeObj.endpoint === parseUrl.pathname && routeObj.method === request.method
+        routeObj.endpoint === pathname && routeObj.method === request.method
     ));
 
     if (route) {
         request.query = parseUrl.query;
+        request.params = { id };
         
         route.handler(request, response);
     } else {
