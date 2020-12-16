@@ -11,5 +11,7 @@ module.exports = {
     ecmaVersion: 11,
   },
   rules: {
+    'linebreak-style': 'off',
+    'class-methods-use-this': 'off',
   },
 };
